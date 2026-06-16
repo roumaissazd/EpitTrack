@@ -1,0 +1,102 @@
+﻿@model IEnumerable<EpitTrack.Models.contratloa>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Contrats de Leasing</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+<p>
+    <a asp-action="Create"> + Ajouter un nouveau contrat</a>
+</p>
+
+        <table id="example1" class="table table-bordered table-striped">
+
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.num_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.immat_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date_deb_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date_fin_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nbre_mois_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_mois_ht_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_mois_ttc_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_1_mois_ht_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_1_mois_ttc_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_vr_ht_contratloa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_vr_ttc_contratloa)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.num_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.immat_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_deb_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_fin_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nbre_mois_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_mois_ht_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_mois_ttc_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_1_mois_ht_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_1_mois_ttc_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_vr_ht_contratloa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_vr_ttc_contratloa)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id_contratloa" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a> 
+                <a asp-action="Details" asp-route-id="@item.id_contratloa" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a> 
+                <a asp-action="Delete" asp-route-id="@item.id_contratloa" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+    </div>
+</div>

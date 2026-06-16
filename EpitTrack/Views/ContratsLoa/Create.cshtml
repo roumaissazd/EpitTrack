@@ -1,0 +1,95 @@
+﻿@model EpitTrack.Models.contratloa
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>contratloa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <p>@Html.DisplayNameFor(model => model.num_contratloa)</p>
+                <input asp-for="num_contratloa" class="form-control" />
+                <span asp-validation-for="num_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <p>@Html.DisplayNameFor(model => model.immat_contratloa)</p>
+                <ejs-textbox id="immat_contratloa" name="immat_contratloa" placeholder="immat_contratloa" ejs-for="immat_contratloa" floatLabelType="Always"></ejs-textbox>
+                <span asp-validation-for="immat_contratloa" class="text-danger"></span>
+            </div>
+            
+            <div class="mb-3">
+                <p>@Html.DisplayNameFor(model => model.date_deb_contratloa)</p>
+                <input asp-for="date_deb_contratloa" class="form-control" />
+                <span asp-validation-for="date_deb_contratloa" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <p>@Html.DisplayNameFor(model => model.date_fin_contratloa)</p>
+                <input asp-for="date_fin_contratloa" class="form-control" />
+                <span asp-validation-for="date_fin_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="nbre_mois_contratloa" class="control-label"></label>
+                <input asp-for="nbre_mois_contratloa" class="form-control" />
+                <span asp-validation-for="nbre_mois_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_mois_ht_contratloa" class="control-label"></label>
+                <input asp-for="mt_mois_ht_contratloa" class="form-control" />
+                <span asp-validation-for="mt_mois_ht_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_mois_ttc_contratloa" class="control-label"></label>
+                <input asp-for="mt_mois_ttc_contratloa" class="form-control" />
+                <span asp-validation-for="mt_mois_ttc_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_1_mois_ht_contratloa" class="control-label"></label>
+                <input asp-for="mt_1_mois_ht_contratloa" class="form-control" />
+                <span asp-validation-for="mt_1_mois_ht_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_1_mois_ttc_contratloa" class="control-label"></label>
+                <input asp-for="mt_1_mois_ttc_contratloa" class="form-control" />
+                <span asp-validation-for="mt_1_mois_ttc_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_vr_ht_contratloa" class="control-label"></label>
+                <input asp-for="mt_vr_ht_contratloa" class="form-control" />
+                <span asp-validation-for="mt_vr_ht_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="mt_vr_ttc_contratloa" class="control-label"></label>
+                <input asp-for="mt_vr_ttc_contratloa" class="form-control" />
+                <span asp-validation-for="mt_vr_ttc_contratloa" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script>
+
+@section Scripts 
+{
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+ 
+}
+</script>
+<script type="text/javascript">
+    $(function () {
+        $('#date_deb').datetimepicker();
+    });
+</script>

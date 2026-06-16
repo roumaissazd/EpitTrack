@@ -1,0 +1,33 @@
+. importer le planning
+. Initialiser le planning
+    . mettre à jour les heures d'arrivé estimé
+	    . récuperer la duree de la course
+    	    . ajouter la duree à l'heure de depart
+	    . mettre à jour le champ heur_fin_estime
+    . initialiser le champs no_circuit à '0' 
+    
+
+. Générer  les circuits :
+
+no_circuit = 1
+heure_circuit = 00h00
+approche(duree pour arrive à l'adresse de la course à partir de la course d'avant) initialiser à 0
+Parcours des course avec l'Etat num_circuit = 0
+    . La_plus_proche_course (adr_circuit,heure_circuit) retourne identifiant de la course la plus proche 
+    . mise_a_jour de la course : num_circuit = no_circuit   
+    . heure_circuit = heure_fin_estime
+
+La_plus_proche_course(adr_circuit,heure_circuit,num_circuit)
+{
+  approche_min = 24 heures
+  
+  parcours_liste_des_courses_avec_num_circuit=0 and heure_dep_course > heure_circuit + 20 minutes
+  calculer duree(adr_circuit,adresse_course_parcourue)  
+  si heure_circuit+duree < approche_min 
+     id_prochaine_course = id_course_parcourue
+     approche_min =  heure_circuit+duree
+   end si
+   return id_prochaine_course 
+
+
+     

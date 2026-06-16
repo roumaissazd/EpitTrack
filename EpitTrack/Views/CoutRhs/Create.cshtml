@@ -1,0 +1,63 @@
+﻿@model EpitTrack.Models.coutrh
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Coût Ressource Humaine</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                   <div class="col-6">
+                    
+                    <select asp-for="id_rh" name="id_rh" asp-items="@ViewBag.LesRh">
+                        <option>-- select rh --</option>
+                    </select>
+                  </div>
+           </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="prenom_rh" value="test"/>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="nom_rh" value="test" />
+            </div>
+            <div class="form-group">
+                <label asp-for="date_deb_coutrh" class="control-label"></label>
+                <input asp-for="date_deb_coutrh" class="form-control" />
+                <span asp-validation-for="date_deb_coutrh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="date_fin_coutrh" class="control-label"></label>
+                <input asp-for="date_fin_coutrh" class="form-control" />
+                <span asp-validation-for="date_fin_coutrh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mt_cout_paie" class="control-label"></label>
+                <input asp-for="mt_cout_paie" class="form-control" />
+                <span asp-validation-for="mt_cout_paie" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="mt_frais" class="control-label"></label>
+                <input asp-for="mt_frais" class="form-control" />
+                <span asp-validation-for="mt_frais" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,67 @@
+﻿@model IEnumerable<EpitTrack.Models.rh>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les RH</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Rh</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+             <th>
+                @Html.DisplayNameFor(model => model.prenom_rh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.nom_rh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.poste_rh)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.date_embauche_rh)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.salaire_net_rh)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.prenom_rh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nom_rh)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.poste_rh)
+            </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.date_embauche_rh)
+                        </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.salaire_net_rh)
+            </td>
+            <td>
+                            <a asp-action="Edit" asp-route-id="@item.id_rh" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.id_rh" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_rh" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

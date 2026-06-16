@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EpitTrack.Models.Classification>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.lib_to_class)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_class_op)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lib_class_op)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_sous_class_op)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lib_sous_class_op)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.lib_to_class)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_class_op)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClassOp.lib_class_op)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.id_sous_class_op)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SousClassOp.lib_sous_class_op)
+                </td>
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id_classification">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id_classification">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id_classification">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

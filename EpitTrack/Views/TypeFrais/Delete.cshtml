@@ -1,0 +1,40 @@
+﻿@model EpitTrack.Models.typefrais
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Vous confirmez cette suppression ?</h3>
+<div>
+    <h4>Type de Frais</h4> 
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_typefrais)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.id_typefrais)
+        </dd>
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.type_frais)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.type_frais)
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.comment_typefrais)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.comment_typefrais)
+        </dd>
+
+    </dl>
+   <form asp-action="AnyTrivialString">
+        <input type="submit" asp-route-id="@Model.id_typefrais" value="Delete" asp-action="DeleteConfirmed" />
+   </form>
+</div>

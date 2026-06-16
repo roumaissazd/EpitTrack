@@ -1,0 +1,270 @@
+@model EpitTrack.ViewModels.SelectClassViewModel;
+
+@{
+    var banque_op = Model.banque_op;
+    var classesOperations = Model.lesClassesOperations;
+    var sous_classesOperations = Model.lesSousClassOperations;
+    int modif =0;
+}
+<style>
+    /* Popup container */
+    .popup {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 50px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+
+            /* Popup arrow */
+            .popup .popuptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        /* Toggle this class when clicking on the popup container (hide and show the popup) */
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s
+        }
+
+
+    .btn-centered {
+        display: block; /* Affiche le bouton comme un bloc */
+        width: 150px; /* Largeur fixe du bouton */
+        height: 50px; /* Hauteur fixe du bouton */
+        line-height: 50px; /* Hauteur de ligne égale à la hauteur du bouton pour centrer verticalement le texte */
+        margin: 0 auto; /* Marges automatiques sur les côtés pour centrer horizontalement */
+        text-align: center; /* Centrer le texte à l'intérieur du bouton horizontalement */
+        padding: 0; /* Pas de padding pour que line-height contrôle l'alignement vertical */
+    }
+
+    .progress {
+        width: 100%;
+        background-color: #ddd;
+    }
+
+    .progress-bar {
+        height: 20px;
+        background-color: #4CAF50;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+    }
+
+    .scrollable {
+        overflow-x: auto; /* Active le défilement horizontal si nécessaire */
+    }
+</style>
+<div class="select-container">
+    @if (banque_op.id_class_op > 0)
+    {
+        <table class="tab_modif_@Model.banque_op.id_banque">
+            <tr>
+                <td width="35%">
+                    <label>@banque_op.lib_class_op</label>
+                </td>
+                <td width="5%">-</td>
+                <td width="35%">
+                    <label>@banque_op.lib_sous_class_op</label>
+                </td>
+                <td width="20%">
+                    <button class="btn-modif_@Model.banque_op.id_banque">Modifier</button>
+                </td>
+            </tr>
+        </table>
+        <table class="tab_select_mod_@Model.banque_op.id_banque" style="display:none">
+            <tr>
+                <td width="35%">
+                    <select class="selectClass_@Model.banque_op.id_banque">
+                        <option value="">- Select class -</option>
+                        @foreach (var classe in classesOperations)
+                        {
+                            <option value="@classe.id_class_op">@classe.lib_class_op</option>
+                        }
+                    </select>
+                </td>
+                <td width="5%">-</td>
+                <td width="35%">
+                    @if (sous_classesOperations != null && sous_classesOperations.Any())
+                    {
+                        <select class="selectSousClass_@Model.banque_op.id_banque" style="display:none;">
+                            <option value="">- Select sous class -</option>
+                            @foreach (var Sousclasse in sous_classesOperations)
+                            {
+                                <option value="@Sousclasse.id_sous_class_op">@Sousclasse.lib_sous_class_op</option>
+                            }
+                        </select>
+
+                    }
+                </td>
+                <td width="20%">
+                    <button class="btn-affecter_@Model.banque_op.id_banque">Affecter</button>
+                </td>
+            </tr>
+        </table>
+    }
+    else
+    {    @if (classesOperations != null && classesOperations.Any())
+       {
+        <table class="tab_select_@Model.banque_op.id_banque">
+            <tr>
+                <td width="35%">
+                    <select class="selectClass_@Model.banque_op.id_banque">
+                        <option value="">- Select class -</option>
+                        @foreach (var classe in classesOperations)
+                        {
+                            <option value="@classe.id_class_op">@classe.lib_class_op</option>
+                        }
+                    </select>
+                </td>
+                <td width="5%">-</td>
+                <td width="35%">
+                    @if (sous_classesOperations != null && sous_classesOperations.Any())
+                    {
+                        <select class="selectSousClass_@Model.banque_op.id_banque" style="display:none;">
+                            <option value="">- Select sous class -</option>
+                            @foreach (var Sousclasse in sous_classesOperations)
+                            {
+                                <option value="@Sousclasse.id_sous_class_op">@Sousclasse.lib_sous_class_op</option>
+                            }
+                        </select>
+
+                    }
+                </td>
+                <td width="20%">
+                    <button class="btn-affecter_@Model.banque_op.id_banque">Affecter</button>
+                </td>
+            </tr>
+        </table>
+        }
+        }
+        <table class="tab_lib_@Model.banque_op.id_banque" style="display:none;">
+            <tr>
+                <td width="35%">
+                        <label class="label_@Model.banque_op.id_banque"></label>
+                </td>
+                <td width="5%">-</td>
+                <td width="35%">
+                         <label class="label_sc_@Model.banque_op.id_banque"></label>
+                </td>
+                <td width="20%">
+                    <button class="btn-annuler_@Model.banque_op.id_banque" style="display:none;">Annuler</button>
+                </td>
+            </tr>
+            </table>
+</div>
+<script>
+
+    $('.selectClass_' + @Model.banque_op.id_banque).change(function () {
+
+        var selectedClassId = $(this).val();
+        if (selectedClassId) {
+            $.ajax({
+                url: '@Url.Action("GetSousClasses", "Banque")', // Assurez-vous que le nom du contrôleur est correct
+                type: 'GET',
+                data: { idClassOp: selectedClassId },
+                success: function (data) {
+                    var sousClassSelect = $('.selectSousClass_' + @Model.banque_op.id_banque);
+                    sousClassSelect.empty().append('<option value="">- Select sous class -</option>');
+                    data.forEach(function (sousClass) {
+                        sousClassSelect.append($('<option></option>').attr('value', sousClass.id).text(sousClass.lib));
+                    });
+                    sousClassSelect.show();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Erreur lors de la récupération des sous-classes : ", error);
+                }
+            });
+        }
+    });
+
+
+    $('.select-container .btn-modif_' + @Model.banque_op.id_banque).click(function () 
+    {
+        var container = $(this).closest('.select-container');
+        container.find('.tab_modif_' + @Model.banque_op.id_banque).hide();
+        container.find('.tab_select_mod_' + @Model.banque_op.id_banque).show();
+    });
+
+
+
+
+
+    $('.select-container .btn-affecter_'+@Model.banque_op.id_banque).click(function () 
+    {
+        
+        var container = $(this).closest('.select-container');
+
+        var selectedOption = container.find('.selectClass_' + @Model.banque_op.id_banque).val();
+        var selectedOption_sc = container.find('.selectSousClass_' + @Model.banque_op.id_banque).val();
+
+        var classeSelectionnee = container.find('.selectClass_' + @Model.banque_op.id_banque + " option:selected").text();
+        var sous_classeSelectionnee = container.find('.selectSousClass_' + @Model.banque_op.id_banque + " option:selected").text();
+
+        if (selectedOption > 0) 
+        {
+            container.find('.label_' + @Model.banque_op.id_banque).text(classeSelectionnee).show();
+            container.find('.selectClass_' + @Model.banque_op.id_banque).hide();
+            container.find('.selectSousClass_' + @Model.banque_op.id_banque).hide();
+            container.find('.btn-affecter_' + @Model.banque_op.id_banque).hide();
+            container.find('.btn-annuler_' + @Model.banque_op.id_banque).show();
+            if (selectedOption_sc > 0)
+                {
+                   container.find('.label_sc_' + @Model.banque_op.id_banque).text(sous_classeSelectionnee).show();
+                }
+            container.find('.tab_select_' + @Model.banque_op.id_banque).hide();
+            container.find('.tab_select_mod_' + @Model.banque_op.id_banque).hide();
+            container.find('.tab_lib_' + @Model.banque_op.id_banque).show();
+            Affect_class(@Model.banque_op.id_banque, selectedOption, selectedOption_sc);
+        }
+    });
+
+    $('.select-container .btn-annuler_' + @Model.banque_op.id_banque).click(function () {
+       var container = $(this).closest('.select-container');
+        container.find('.selectClass_' + @Model.banque_op.id_banque).show();
+        container.find('.tab_select_' + @Model.banque_op.id_banque).show();
+        container.find('.tab_lib_' + @Model.banque_op.id_banque).hide();
+       container.find('.selectClass_' + @Model.banque_op.id_banque).val('');
+       container.find('.btn-affecter_' + @Model.banque_op.id_banque).show();
+       container.find('.btn-annuler_' + @Model.banque_op.id_banque).hide();
+        container.find('.tab_select_mod_' + @Model.banque_op.id_banque).show();
+    });
+
+
+    function Affect_class(idbanque, idclass, idsousclass) {
+        $.ajax(
+
+            {
+                url: '/banque/Affecter_class', // Vérifiez que cette URL est correcte.
+                type: 'POST',
+                data: { p_idbanque: idbanque, p_idclass: idclass, p_id_sous_class: idsousclass },
+                success: function (response) {}
+                   
+            });
+    };
+
+
+
+</script>

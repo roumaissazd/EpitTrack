@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EpitTrack.Models.consocarbur>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Consommation Carburant</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Conso</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.date_deb_consocarbur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.date_fin_consocarbur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_ht_consocarbur)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.mt_ttc_consocarbur)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_deb_consocarbur)
+            </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.date_fin_consocarbur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_ht_consocarbur)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.mt_ttc_consocarbur)
+            </td>
+            <td>
+                            <a asp-action="Edit" asp-route-id="@item.id_consocarbur" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.id_consocarbur" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_consocarbur" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

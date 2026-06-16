@@ -1,0 +1,95 @@
+﻿@model EpitTrack.Models.Chauffeur
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<hr />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Chauffeurs </h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="id_chauff" />
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="nom_chauff" class="control-label"></label>
+                    <input asp-for="nom_chauff" class="form-control" />
+                    <span asp-validation-for="nom_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="prenom_chauff" class="control-label"></label>
+                    <input asp-for="prenom_chauff" class="form-control" />
+                    <span asp-validation-for="prenom_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="adr_chauff" class="control-label"></label>
+                    <input asp-for="adr_chauff" class="form-control" />
+                    <span asp-validation-for="adr_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="cp_chauff" class="control-label"></label>
+                    <input asp-for="cp_chauff" class="form-control" />
+                    <span asp-validation-for="cp_chauff" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="ville_chauff" class="control-label"></label>
+                    <input asp-for="ville_chauff" class="form-control" />
+                    <span asp-validation-for="ville_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="pays_chauff" class="control-label"></label>
+                    <input asp-for="pays_chauff" class="form-control" />
+                    <span asp-validation-for="pays_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                       <label asp-for="type_voiture_chauff" class="control-label"></label>
+                        <select asp-for="type_voiture_chauff" name="type_voiture_chauff" asp-items="@ViewBag.typesVoiture">
+                            <option>-- select type voiture --</option>
+                        </select>
+                    </div>
+                <div class="col-sm-3">
+                    <label asp-for="hdispo_chauff" class="control-label"></label>
+                    <input asp-for="hdispo_chauff" class="form-control" />
+                    <span asp-validation-for="hdispo_chauff" class="text-danger"></span>
+                </div>
+                </div>
+                <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="position_chauff" class="control-label"></label>
+                    <input asp-for="position_chauff" class="form-control" />
+                    <span asp-validation-for="position_chauff" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="pos_chauff_long" class="control-label"></label>
+                    <input asp-for="pos_chauff_long" class="form-control" />
+                    <span asp-validation-for="pos_chauff_long" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="pos_chauff_lat" class="control-label"></label>
+                    <input asp-for="pos_chauff_lat" class="form-control" />
+                    <span asp-validation-for="pos_chauff_lat" class="text-danger"></span>
+                </div>
+                <div></div>
+            </div>
+        </div>
+              <form asp-action="AnyTrivialString">
+            <input type="submit" asp-route-id="@Model.id_chauff" value="valider" asp-action="EditConfirmed" class="btn btn-primary" />
+            </form>
+        </form>
+    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<EpitTrack.Models.typefrais>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les Types de Frais</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter un Type de Frais</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+             <th>
+                @Html.DisplayNameFor(model => model.id_typefrais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.type_frais)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.comment_typefrais)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+               @Html.DisplayFor(modelItem => item.id_typefrais)
+            </td>
+             <td>
+               @Html.DisplayFor(modelItem => item.type_frais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.comment_typefrais)
+            </td>
+            <td>
+                            <a asp-action="Edit" asp-route-id="@item.id_typefrais" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.id_typefrais" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_typefrais" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

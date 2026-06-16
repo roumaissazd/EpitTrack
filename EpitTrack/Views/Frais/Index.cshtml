@@ -1,0 +1,82 @@
+﻿@model IEnumerable<EpitTrack.Models.frais>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les Fais</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Frais</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id_frais)
+                    </th>
+             <th>
+                        @Html.DisplayNameFor(model => model.type_frais)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.date_deb_frais)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.date_fin_frais)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.mt_frais_ht)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.mt_frais_ttc)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.comment_frais)
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+               @Html.DisplayFor(modelItem => item.id_frais)
+            </td>
+             <td>
+               @Html.DisplayFor(modelItem => item.type_frais)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_deb_frais)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.date_fin_frais)
+            </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.mt_frais_ht)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.mt_frais_ttc)
+                        </td>
+                        <td>
+
+                            @Html.DisplayFor(modelItem => item.comment_frais)
+                                    </td>
+           
+            <td>
+                            <a asp-action="Edit" asp-route-id="@item.id_frais" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.id_frais" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_frais" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

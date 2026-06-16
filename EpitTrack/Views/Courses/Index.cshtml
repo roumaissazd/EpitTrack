@@ -1,0 +1,371 @@
+﻿@model IEnumerable<EpitTrack.Models.Course>
+@{
+    var dateCourses = Model.FirstOrDefault()?.date_course.ToString("yyyy-MM-dd") ?? string.Empty;
+}
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+<style>
+    /* Popup container */
+    .popup {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 50px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+
+            /* Popup arrow */
+            .popup .popuptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        /* Toggle this class when clicking on the popup container (hide and show the popup) */
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s
+        }
+
+
+    .btn-centered {
+        display: block; /* Affiche le bouton comme un bloc */
+        width: 150px; /* Largeur fixe du bouton */
+        height: 50px; /* Hauteur fixe du bouton */
+        line-height: 50px; /* Hauteur de ligne égale à la hauteur du bouton pour centrer verticalement le texte */
+        margin: 0 auto; /* Marges automatiques sur les côtés pour centrer horizontalement */
+        text-align: center; /* Centrer le texte à l'intérieur du bouton horizontalement */
+        padding: 0; /* Pas de padding pour que line-height contrôle l'alignement vertical */
+    }
+
+    .progress {
+        width: 100%;
+        background-color: #ddd;
+    }
+
+    .progress-bar {
+        height: 20px;
+        background-color: #4CAF50;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+    }
+
+    .scrollable {
+        overflow-x: auto; /* Active le défilement horizontal si nécessaire */
+    }
+</style>
+<head>
+    <!-- ... autres inclusions ... -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Gestion des courses</h3>
+    </div>
+<div>
+    
+    <form action="Courses/Importer" method="post" enctype="multipart/form-data">
+        <title>Upload la liste des courses</title>
+        <p><h4>Importer : </h4><input type="file" name="file" /></p>
+        <input type="submit" value="Importer" class="btn btn-primary" />
+    </form>
+</div>
+    <div>@TempData["Message"]</div>
+    <div>@ViewBag.date_courses</div>
+
+    <form asp-action="ValidMajLongLat">
+        <table>
+            <tr>
+                <td>
+
+                    <input type="date" class="form-control" id="date_courses" name="date_courses" value="@dateCourses" style="width: 150px;">
+                </td>
+                <td>
+                    <input type="submit" value="Valider" class="btn btn-primary" />
+                </td>
+            <tr />
+        </table>
+    </form>
+    <div class="scrollable">
+        <div class="card-header">
+            <h3 class="card-title">Les Courses</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Actu_references">Actualiser</a>
+            </p>
+            <div class="scrollable">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.date_course)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.nom_passagers)
+                        </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_depart )
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_arrivee)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_dep_lat)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_dep_long)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_arr_lat)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.adr_arr_long)
+                            </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.heur_deb_course)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.heur_fin_course)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.heur_moy_fin_course)
+                        </th>
+
+                       
+                        <th>
+                            @Html.DisplayNameFor(model => model.km_moy_course)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.prix_vente_ht)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.id_chauff1)
+                        </th>
+                       
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr id="ligneCourse_@item.id_course">
+                            <td>
+                                @(item.date_course.ToString("dd/MM/yyyy"))
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.nom_passagers)
+                            </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_depart)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_arrivee)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_dep_lat)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_dep_long)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_arr_lat)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.adr_arr_long)
+                                </td>
+                               
+                            <td>
+                                @((item.heur_deb_course / 60).ToString("D2"))h@((item.heur_deb_course % 60).ToString("D2"))
+                            </td>
+                            <td>
+                                @((item.heur_fin_course / 60).ToString("D2"))h@((item.heur_fin_course % 60).ToString("D2"))
+                            </td>
+                            <td>
+                                @((item.heur_moy_fin_course / 60).ToString("D2"))h@((item.heur_moy_fin_course % 60).ToString("D2"))
+                            </td>
+                           
+                            <td>
+                                @Html.DisplayFor(modelItem => item.km_moy_course)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.prix_vente_ht)
+                            </td>
+                            <td>
+                                @item.nom_chauff @item.prenom_chauff
+                            </td>
+                           
+                                
+                            <!--
+                            <td>
+                                <button class="Refresh-button" data-id="@item.id_course">Actualiser</button>
+                                <button class="Affecter-button" data-id="@item.id_course">Affecter</button>
+                                <a asp-action="Edit" asp-route-id="@item.id_course">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.id_course">Details</a> |
+                                <a asp-action="Delete" asp-route-id="@item.id_course">Delete</a>
+                            </td>
+                            -->
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <script>
+            //setInterval(Rafraichir, 30000);
+
+            // setTimeout(function () {
+            //    window.location.reload(1);
+            // }, 30000); // 30000 milliseconds = 30 seconds
+
+            function Rafraichir() {
+                $.ajax({
+                    url: '@Url.Action("Actualiser", "Planning")',
+                    method: 'GET',
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                });
+            };
+
+            $(document).ready(function () {
+
+                $('.Refresh-button').click(function () {
+
+                    var itemId = $(this).data('id');
+                    var tr = $(this).closest('tr');
+                    var td_a_modifier = tr.find('td').eq(7)
+                    $.ajax({
+                        url: '@Url.Action("Reshresh", "Planning")',
+                        type: 'POST',
+                        data: { id: itemId },
+                        success: function (response) {
+                            if (response.success) {
+                                td_a_modifier.text(response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']')
+                            }
+                        },
+                        error: function (error) {
+                            // Gérer les erreurs ici
+                        }
+                    });
+                });
+                $('.Affecter-button').click(function () {
+                    var itemId = $(this).data('id');
+                    var tr = $(this).closest('tr');
+                    var td_a_modifier = tr.find('td').eq(7)
+                    $.ajax({
+                        url: '@Url.Action("Affecter", "Planning")',
+                        type: 'POST',
+                        data: { id: itemId },
+                        success: function (response) {
+
+                            if (response.success) {
+                                let liste = '<select id="SelectChauff"><option>--select chauffeur --</option>'
+                                response.leschauffeurs.forEach(chauff => {
+                                    liste += '<option value=' + chauff.id_chauff + '>' + chauff.prenom_chauff + ' ' + chauff.nom_chauff + '</option>';
+                                });
+                                liste = liste + '</select>'
+                                td_a_modifier.html(liste)
+                                SelectChauff.addEventListener('change', function () {
+                                    let selectedID = this.value;
+                                    Affecter_chauff(selectedID, itemId)
+                                });
+                            }
+                        },
+                        error: function (error) {
+
+
+                        }
+                    });
+                });
+
+                function Affecter_chauff(id_chauff, id_course) {
+                    var idLigne = 'ligneCourse_' + id_course;
+                    var tr = $('#' + idLigne);
+                    var td_a_modifier = tr.find('td').eq(7)
+                    $.ajax({
+                        url: '@Url.Action("Affect_chauff", "Planning")',
+                        type: 'POST',
+                        data: { idch: id_chauff, idc: id_course },
+                        success: function (response) {
+                            if (response.success) {
+                                balise_supp_affect = '<a href = "javascript:SuppAffect();" style = "font-size: 25px; font-weight: bold;">x</a>'
+                                balise_affect_chauff = '<p>' + response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']'
+
+                                td_a_modifier.text(response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']')
+                                td_a_modifier.html(balise_affect_chauff + '<span>' + balise_supp_affect + '</span>')
+                            }
+                            else {
+                                erreur_msg = '<p style="color: red;">' + response.message + '</p>'
+                                td_a_modifier.html(erreur_msg)
+                            }
+                        }
+                    });
+                };
+
+                /**********/
+                function SuppAffect() {
+                    
+                    /*
+                    var idLigne = 'ligneCourse_' + id_course;
+                    var tr = $('#' + idLigne);
+                    var td_a_modifier = tr.find('td').eq(7)
+                    $.ajax({
+                        url: '/Url.Action("Supp_Affect", "Planning")',
+                        type: 'POST',
+                        data: { idch: id_chauff, idc: id_course },
+                        success: function (response) {
+                            if (response.success) {
+                                let liste = '<select id="SelectChauff"><option>--select chauffeur --</option>'
+                                response.leschauffeurs.forEach(chauff => {
+                                    liste += '<option value=' + chauff.id_chauff + '>' + chauff.prenom_chauff + ' ' + chauff.nom_chauff + '</option>';
+                                });
+                                liste = liste + '</select>'
+                                td_a_modifier.html(liste)
+                                SelectChauff.addEventListener('change', function () {
+                                    let selectedID = this.value;
+                                    Affecter_chauff(selectedID, itemId)
+                                                                                     });
+                            }
+                        }
+                    });
+                    */
+                };
+                /********/
+            });
+            @section Scripts {
+                @{
+                    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                }
+                }
+
+        </script>
+
+    </div>
+
+</div>
+

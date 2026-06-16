@@ -1,0 +1,50 @@
+﻿@model IEnumerable<EpitTrack.Models.SousClassOp>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.id_sous_class_op)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.lib_sous_class_op)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.id_class_op)
+            </th>
+            <th>@Html.DisplayNameFor(model => model.lib_class_op)</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_sous_class_op)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lib_sous_class_op)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.id_class_op)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.lib_class_op)
+                </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id_sous_class_op">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.id_sous_class_op">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id_sous_class_op">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<EpitTrack.Models.planning>
+<div id="container"></div> <!-- Conteneur pour le graphique -->
+<style>
+    #container {
+        width: 100%;
+        height: 100%; /* Set a fixed height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+</style>
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery pour AJAX -->
+    <script src="https://code.highcharts.com/gantt/highcharts-gantt.js"></script> <!-- Highcharts Gantt -->
+
+    <script>
+        $(document).ready(function () {
+            // Appel AJAX pour récupérer les données du graphique
+            var dateParam = '@Model.FirstOrDefault().date_course';
+            var id_planif_param = '@Model.FirstOrDefault().id_planif';
+            var chartTitle = 'Planning des Chauffeurs n°' + id_planif_param+' pour le ' + dateParam;
+
+
+            $.getJSON('@Url.Action("ChartData", "Planning")', { id_planif: id_planif_param }, function (data) {
+                const hour = 1000 * 60 * 60;
+                const minute = 1000 * 60;
+                const startDate = new Date(data.startDate);
+
+                
+                let seriesData = data.courses.map(course => ({
+                    name: course.name,
+                    start: startDate.getTime() + (course.startHour * hour),
+                    end: startDate.getTime() + (course.startHour * hour) + (course.durationMinutes * minute),
+                    y: course.chauffeurIndex
+                }));
+                
+                
+                // Initialisation du graphique Highcharts Gantt
+                Highcharts.ganttChart('container', {
+                    scrollablePlotArea: {
+                            minWidth: 200, // Adjust this value based on your needs
+                            scrollPositionX: 500 // This sets the initial scroll position
+                            },
+                    title: {
+                        text: chartTitle
+                    },
+                    xAxis: {
+                        min: startDate.getTime()+ (4 * hour),
+                        max: startDate.getTime() + (26 * hour),
+                        tickInterval: 15 * minute,
+                        labels: {
+                            format: '{value:%M}', // Format des heures et minutes
+                            align: 'left',
+                            rotation: -45,
+                            style: {
+                                fontSize: '8px' // Réduire la taille si nécessaire
+                            }
+                        },
+                        gridLineWidth: 1
+                    },
+                    yAxis: {
+                        type: 'category',
+                        categories: data.chauffeurs,
+                        grid: { enabled: true }
+                    },
+                    series: [{
+                        name: 'Courses',
+                        data: seriesData
+                    }]
+                });
+            });
+            
+        });
+    </script>
+}

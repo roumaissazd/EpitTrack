@@ -1,0 +1,54 @@
+﻿@model EpitTrack.Models.coutrh
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Vous confirmez cette suppression ?</h3>
+<div>
+    <h4>Coût Ressource Humaine</h4> 
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_rh)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.id_rh)
+        </dd>
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.date_deb_coutrh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.date_deb_coutrh)
+        </dd>
+
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.date_fin_coutrh)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.date_fin_coutrh)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.mt_cout_paie)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.mt_cout_paie)
+        </dd>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.mt_frais)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.mt_frais)
+        </dd>
+
+    </dl>
+   <form asp-action="AnyTrivialString">
+        <input type="submit" asp-route-id="@Model.id_coutrh" value="Delete" asp-action="DeleteConfirmed" />
+   </form>
+</div>

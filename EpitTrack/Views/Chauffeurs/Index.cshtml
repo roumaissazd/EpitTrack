@@ -1,0 +1,99 @@
+﻿@model IEnumerable<EpitTrack.Models.Chauffeur>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les RH</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Chauffeur</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.id_chauff)
+                    </th>
+             <th>
+                @Html.DisplayNameFor(model => model.nom_chauff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.prenom_chauff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.adr_chauff)
+            </th>
+            <th>
+               @Html.DisplayNameFor(model => model.cp_chauff)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ville_chauff)
+            </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.pays_chauff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.type_voiture_chauff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.hdispo_chauff)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.position_chauff)
+                    </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+               @Html.DisplayFor(modelItem => item.id_chauff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.nom_chauff)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.prenom_chauff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.adr_chauff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cp_chauff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ville_chauff)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pays_chauff)
+            </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.type_voiture_chauff)
+                        </td>
+            <td>
+               @Html.DisplayFor(modelItem => item.hdispo_chauff)
+            </td>
+            <td>
+                            <FONT size="2">@Html.DisplayFor(modelItem => item.position_chauff)</FONT>
+              
+            </td>
+                        <td>
+                            <a asp-action="Absences" asp-route-id="@item.id_chauff" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Absences</a>
+                            <a asp-action="Edit" asp-route-id="@item.id_chauff" class="btn btn-primary"><i class="fa fa-pencil-alt"></i>Edit</a>
+                            <a asp-action="Details" asp-route-id="@item.id_chauff" class="btn btn-secondary"><i class="fa fa-eye"></i>Details</a>
+                            <a asp-action="Delete" asp-route-id="@item.id_chauff" class="btn btn-danger"><i class="fa fa-trash"></i>Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

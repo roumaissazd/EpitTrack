@@ -1,0 +1,200 @@
+﻿@{
+    ViewData["Title"] = "Visualisation des Entrées et Sorties";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div id="container"></div>
+<div id="detailsContainer" style="margin-top: 40px;"></div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+    <script>
+        $(document).ready(function () 
+        {
+            $.getJSON('@Url.Action("ChartData", "Banque")', function (data) {
+                // Les données des entrées et des sorties sont directement utilisées,
+                // puisque le contrôleur envoie déjà des tableaux prêts à l'emploi.
+                
+               // alert("Première valeur de crédit pour le mois " + data.Entrees[3])// + " : " + data.Entrees[0].SumMtCredit);
+                // Initialisation du graphique principal
+
+                const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+
+
+                const mainChart = Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Entrées et Sorties par Mois'
+                    },
+                    xAxis: {
+                        categories: months,
+                        crosshair: true // Utiliser les mois directement depuis la réponse du serveur
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Montant'
+                        }
+                    },
+                    plotOptions: {
+                        column: {
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        // Appel pour charger les données détaillées
+                                        loadDetails(this.category, this.series.name);
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Entrées',
+                        data: data[0] // Utilisation directe des données d'entrées
+                    }, {
+                        name: 'Sorties',
+                        data: data[1] // Utilisation directe des données de sorties
+                    }]
+                });
+            });
+
+            function loadDetails(month, type) {
+                $.getJSON('@Url.Action("ChartDetailData", "Banque")', { month: month, type: type }, function (formattedData) {
+                    Highcharts.chart('detailsContainer', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Détails des ' + type + ' pour ' + month
+                        },
+                        tooltip: {
+                            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                        },
+                        plotOptions: {
+                            pie: {
+                                allowPointSelect: true,
+                                cursor: 'pointer',
+                                dataLabels: {
+                                    enabled: true,
+                                    format: '<b>{point.name}</b>: {point.y} ( {point.percentage:.1f}% )',
+                                    style: {
+                                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                                    }
+                                },
+                                showInLegend: true
+                            }
+                        },
+                        series: [{
+                            name: type,
+                            colorByPoint: true,
+                            data: formattedData
+                        }]
+                    });
+                });
+            }
+
+
+            /*
+            $.getJSON('@Url.Action("ChartData", "Banque")', function (data) {
+
+                const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin','Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+                const entreesData = months.map((month, index) => 
+                {
+                    const entree = data.Entrees.find(item => item.Mois === index + 1);
+                    return entree ? entree.SumMtCredit : 0;
+                });
+
+                const sortiesData = months.map((month, index) => {
+                    const sortie = data.Sorties.find(item => item.Mois === index + 1);
+                    return sortie ? sortie.SumMtDebit : 0;
+                });
+
+
+            // Initialisation du graphique principal
+            const mainChart = Highcharts.chart('container', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Entrées et Sorties par Mois'
+                },
+                xAxis: {
+                    categories: ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
+                },
+                yAxis: {
+                    min: 0,
+                    title: {
+                        text: 'Montant'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        cursor: 'pointer',
+                        point: {
+                            events: {
+                                click: function () {
+                                    // Appel pour charger les données détaillées
+                                    loadDetails(this.category, this.series.name);
+                                }
+                            }
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Entrées',
+                        data: entreesData //[100, 500, 200, 150, 300, 600, 500, 300, 400, 200, 100]
+                }, {
+                    name: 'Sorties',
+                        data: sortiesData //[120, 400, 150, 160, 250, 500, 420, 210, 350, 220, 115]
+                }]
+            });
+            });
+
+
+            function loadDetails(month, type) {
+                // Récupérer et afficher les détails pour le mois et type sélectionné
+                $.getJSON('@Url.Action("ChartData", "Banque")', { month: month, type: type }, function (details) {
+                    Highcharts.chart('detailsContainer', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Détails des ' + type + ' pour ' + month
+                        },
+                        series: [{
+                            name: type,
+                            colorByPoint: true,
+                            data: details.map(item => ({
+                                name: item.Name,
+                                y: item.Total
+                            }))
+                        }]
+                    });
+                });
+            };
+
+             */
+
+
+
+
+
+
+        });
+
+   
+
+   </script>
+}

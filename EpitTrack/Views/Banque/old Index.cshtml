@@ -1,0 +1,425 @@
+﻿@model EpitTrack.ViewModels.BanquesViewModel;
+
+<style>
+    /* Popup container */
+    .popup {
+        position: relative;
+        display: inline-block;
+        cursor: pointer;
+    }
+
+        /* The actual popup (appears on top) */
+        .popup .popuptext {
+            visibility: hidden;
+            width: 50px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 8px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -80px;
+        }
+
+            /* Popup arrow */
+            .popup .popuptext::after {
+                content: "";
+                position: absolute;
+                top: 100%;
+                left: 50%;
+                margin-left: -5px;
+                border-width: 5px;
+                border-style: solid;
+                border-color: #555 transparent transparent transparent;
+            }
+
+        /* Toggle this class when clicking on the popup container (hide and show the popup) */
+        .popup .show {
+            visibility: visible;
+            -webkit-animation: fadeIn 1s;
+            animation: fadeIn 1s
+        }
+
+
+    .btn-centered {
+        display: block; /* Affiche le bouton comme un bloc */
+        width: 150px; /* Largeur fixe du bouton */
+        height: 50px; /* Hauteur fixe du bouton */
+        line-height: 50px; /* Hauteur de ligne égale à la hauteur du bouton pour centrer verticalement le texte */
+        margin: 0 auto; /* Marges automatiques sur les côtés pour centrer horizontalement */
+        text-align: center; /* Centrer le texte à l'intérieur du bouton horizontalement */
+        padding: 0; /* Pas de padding pour que line-height contrôle l'alignement vertical */
+    }
+
+    .progress {
+        width: 100%;
+        background-color: #ddd;
+    }
+
+    .progress-bar {
+        height: 20px;
+        background-color: #4CAF50;
+        text-align: center;
+        line-height: 20px;
+        color: white;
+    }
+
+    .scrollable {
+        overflow-x: auto; /* Active le défilement horizontal si nécessaire */
+    }
+</style>
+<head>
+    <!-- ... autres inclusions ... -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Gestion des opérations bancaires</h3>
+    </div>
+<div>
+    
+    <form action="Banque/Importer" method="post" enctype="multipart/form-data">
+        <title>Upload la liste des opérations bancaires</title>
+        <p><h4>Importer : </h4><input type="file" name="file" /></p>
+        <input type="submit" value="Importer" class="btn btn-primary" />
+    </form>
+</div>
+   
+    <form asp-action="Classifier_operation">
+        <table>
+            <tr>
+                <td>
+                    <input type="submit" value="Classifier" class="btn btn-primary" />
+                </td>
+                <td>
+                    <a id="visualiserRepartition" href="Banque/visualiser_repartition">Visualiser Répartition</a>
+                </td>
+            <tr />
+        </table>
+    </form>
+    <div class="scrollable">
+        <div class="card-header">
+            <h3 class="card-title">Les Opérations bancaires</h3>
+        </div>
+        <div class="card-body">
+            <div class="scrollable">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().id_banque)
+                        </th>
+                        <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().date_banque)
+                        </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().date_valeur)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().lib_operation)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().mt_debit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().mt_credit)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().lib_class_op)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.OperationsBanqueCA.FirstOrDefault().lib_sous_class_op)
+                            </th>
+                    </tr>
+                </thead>
+                <tbody>
+                        @foreach (var item in Model.OperationsBanqueCA)
+                    {
+                        <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.id_banque)
+                                </td>
+                            <td>
+                                @(item.date_banque.ToString("dd/MM/yyyy"))
+                            </td>
+                            <td>
+                               @(item.date_valeur.ToString("dd/MM/yyyy"))
+                            </td>
+                             <td>
+                                   @Html.DisplayFor(modelItem => item.lib_operation)
+                             </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mt_debit)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.mt_credit)
+                                </td>
+                                <td>
+                                    @if (item.id_class_op > 0)
+                                    {
+                                        <div id="divSelectC_@item.id_banque" style="display: none;">
+                                            <select id="SelectClass_@item.id_banque">
+                                                <option value="">-Select class-</option>
+                                                @foreach (var itemClass in Model.lesClassesOperations)
+                                                {
+                                                    <option value="@itemClass.id_class_op">@itemClass.lib_class_op</option>
+                                                }
+                                            </select>
+                                            <button class="btn-affecter" data-id="@item.id_banque">Affecter</button>
+                                        </div>
+                                        <div id="divAnnulC_@item.id_banque">
+                                            <label>@item.lib_class_op</label>
+                                            <button class="btn-annuler-affect" data-id="@item.id_banque">Annuler</button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div id="divSelectC_@item.id_banque">
+                                            <select id="SelectClass_@item.id_banque" data-id="@item.id_banque" onchange="chargerSC(this)">
+                                                <option value="">-Select class-</option>
+                                                @foreach (var itemClass in Model.lesClassesOperations)
+                                                {
+                                                    <option value="@itemClass.id_class_op">@itemClass.lib_class_op</option>
+                                                }
+                                            </select>
+                                            <button class="btn-affecter" data-id="@item.id_banque">Affecter</button>
+                                        </div>
+                                        <div id="divAnnulC_@item.id_banque" style="display:none;">
+                                            <button class="btn-annuler-affect" data-id="@item.id_banque">Annuler</button>
+                                        </div>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.id_sous_class_op > 0)
+                                    {
+                                        <div id="divSelectSC_@item.id_banque" style="display: none;">
+                                            <select id="SelectSClass_@item.id_banque">
+                                                <option value="">-Select class-</option>
+                                                @foreach (var itemSousClass in Model.lesSousClassesOperations.Where(sc => sc.id_sous_class_op == item.id_class_op))
+                                                {
+                                                    <option value="@itemSousClass.id_sous_class_op">@itemSousClass.lib_sous_class_op</option>
+                                                }
+                                            </select>
+                                            <button class="btn-affecter_sc" data-id="@item.id_banque">Affecter</button>
+                                        </div>
+                                        <div id="divAnnulSC_@item.id_banque">
+                                            <label>@item.lib_sous_class_op</label>
+                                            <button class="btn-annuler-sc-affect" data-id="@item.id_banque">Annuler</button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        @if (item.id_class_op > 0)
+                                        {
+                                           
+                                        <div id="divSelectSC_@item.id_banque">
+                                            <select id="SelectSClass_@item.id_banque">
+                                                <option value="">-Select sous class-</option>
+                                                    @foreach (var itemSousClass in Model.lesSousClassesOperations.Where(sc => sc.id_class_op == item.id_class_op))
+                                                {
+                                                    <option value="@itemSousClass.id_sous_class_op">@itemSousClass.lib_sous_class_op</option>
+                                                }
+                                            </select>
+                                                <button class="btn-affecter_sc" data-id="@item.id_banque">Affecter</button>
+                                        </div>
+                                        <div id="divAnnulSC_@item.id_banque" style="display:none;">
+                                            <button class="btn-annuler-sc-affect" data-id="@item.id_banque">Annuler</button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div id="divSelectSC_@item.id_banque">
+                                                <select id="SelectSClass_@item.id_banque">
+                                                    <option value="">-Select class-</option>
+                                                    @foreach (var itemSousClass in Model.lesSousClassesOperations)
+                                                    {
+                                                        <option value="@itemSousClass.id_sous_class_op">@itemSousClass.lib_sous_class_op</option>
+                                                    }
+                                                </select>
+                                                <button class="btn-affecter_sc" data-id="@item.id_banque">Affecter</button>
+                                            </div>
+                                            <div id="divAnnulSC_@item.id_banque" style="display:none;">
+                                                <button class="btn-annuler-sc-affect" data-id="@item.id_banque">Annuler</button>
+                                            </div>
+                                        }
+                                    }
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            </div>
+        </div>
+        <script>
+            //setInterval(Rafraichir, 30000);
+
+            // setTimeout(function () {
+            //    window.location.reload(1);
+            // }, 30000); // 30000 milliseconds = 30 seconds
+            function chargerSC(selectElement) {
+                var IdClass = selectElement.options[selectElement.selectedIndex].value;
+
+                $.ajax(
+                 {
+                    url: '/Banque/ChargerSc', // Assurez-vous que cette URL correspond à votre action de contrôleur
+                    type: 'POST',
+                    data: { p_idclass: IdClass },
+                    success: function (response) {
+                        if (Array.isArray(response)) {
+                            let liste = '<select id="divSelectSC_' + selectElement.id + '"><option>--select sous class --</option>';
+                            response.forEach(sc => {
+                                liste += '<option value=' + sc.Value + '>' + sc.Text + '</option>';
+                            });
+                            liste += '</select>';
+                           // var td_a_modifier = $(selectElement).closest('tr').find('td').eq(7); // Modifier selon votre structure HTML
+                           // td_a_modifier.html(liste);
+
+                            // Récupérer l'élément select avec l'ID spécifique
+                            var selectSClass = $('select#SelectSClass_' + selectElement.id.split('_')[1]); // Modifier selon votre ID spécifique
+                            selectSClass.html(liste);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Erreur lors de la requête AJAX : ", error);
+                        // Gérer l'erreur ici
+                    }
+                }
+                );
+            }
+
+
+
+            function Rafraichir() {
+                $.ajax({
+                    url: '@Url.Action("Actualiser", "Planning")',
+                    method: 'GET',
+                    success: function (data) {
+                        window.location.reload();
+                    }
+                });
+            };
+
+            $(document).ready(function () {
+
+                $('.btn-affecter').click(function () {
+
+                    var IdBanque = $(this).data('id');
+                    var IdClass = $("#SelectClass_" + IdBanque).val();
+                    var ClasseSelectionnee = $("#SelectClass_" + IdBanque + " option:selected").text();
+
+                    if (ClasseSelectionnee.length > 0) {
+                        Affect_class(IdBanque, IdClass, ClasseSelectionnee);
+
+                    };
+                });
+                function Affect_class(idbanque, idclass, classe_selectionnee) 
+                {
+                    $.ajax(
+                        
+                    {
+                        url: '/banque/Affecter_class', // Vérifiez que cette URL est correcte.
+                        type: 'POST',
+                        data: { p_idbanque: idbanque, p_idclass: idclass},
+                        success: function (response) 
+                        {
+                            $('#divAnnulC_'  + idbanque + ' label').remove();
+                            $('#divAnnulC_'  + idbanque).append($('<label>').text(classe_selectionnee));
+                            $('#divSelectC_' + idbanque).hide();
+                            $('#divAnnulC_'  + idbanque).show();
+                            $('#divSelectSC_' + idbanque).show();
+                            $('#divAnnulSC_' + idbanque).hide();
+                                
+                        },
+                        error: function (xhr, status, error) 
+                        {
+                            console.error("Erreur lors de l'affectation : ", error);
+                            // Ici, vous pouvez ajouter une logique pour afficher l'erreur à l'utilisateur.
+                        }
+                    });
+                };
+
+                $('.btn-annuler-affect').click(function () 
+                {
+                    var IdBanque = $(this).data('id');
+                    $('#divSelectC_' + IdBanque).show();
+                    $('#divAnnulC_' + IdBanque).hide();
+                    Annuler_Affect_C(IdBanque)
+                });
+
+                function Annuler_Affect_C(idbanque) 
+                {
+                    $.ajax(
+                        
+                    {
+                        url: '/banque/Annuler_Affect_C', // Vérifiez que cette URL est correcte.
+                        type: 'POST',
+                        data: { p_idbanque: idbanque},
+                        success: function (response) 
+                        {}
+                    });
+                };
+
+
+
+                
+
+
+
+
+                $('.btn-affecter_sc').click(function () {
+
+                    var IdBanque = $(this).data('id');
+                    var Id_sous_class = $("#divSelectSC_" + IdBanque).val();
+                    var IdClass = $("#SelectClass_" + IdBanque).val();
+                    var Sous_classeSelectionnee = $("#SelectSClass_" + IdBanque + " option:selected").text();
+
+                    
+
+                    if (Sous_classeSelectionnee.length > 0) {
+                        Affect_sous_class(IdBanque, Id_sous_class, Sous_classeSelectionnee);
+
+                    };
+                    var ClasseSelectionnee = $("#SelectClass_" + IdBanque + " option:selected").text();
+
+                    if (ClasseSelectionnee.length > 0) {
+                        Affect_class(IdBanque, IdClass, ClasseSelectionnee);
+
+                    };
+                });
+                function Affect_sous_class(idbanque, id_sous_class, sous_classeSelectionnee) {
+                    $.ajax(
+
+                        {
+                            url: '/banque/Affecter_sous_class', // Vérifiez que cette URL est correcte.
+                            type: 'POST',
+                            data: { p_idbanque: idbanque, p_id_sous_class: id_sous_class },
+                            success: function (response) {
+                                $('#divAnnulSC_' + idbanque + ' label').remove();
+                                $('#divAnnulSC_' + idbanque).append($('<label>').text(sous_classeSelectionnee));
+                                $('#divSelectSC_' + idbanque).hide();
+                                $('#divAnnulSC_' + idbanque).show();
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Erreur lors de l'affectation : ", error);
+                                // Ici, vous pouvez ajouter une logique pour afficher l'erreur à l'utilisateur.
+                            }
+                        });
+                };
+                
+            });
+            @section Scripts {
+                @{
+                    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+                }
+                }
+
+        </script>
+
+    </div>
+
+</div>
+

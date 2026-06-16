@@ -1,0 +1,62 @@
+﻿@model EpitTrack.Models.rh
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<hr />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Ressource Humaine </h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="id_rh" />
+
+        <div class="card-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="prenom_rh" class="control-label"></label>
+                    <input asp-for="prenom_rh" class="form-control" />
+                    <span asp-validation-for="prenom_rh" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="nom_rh" class="control-label"></label>
+                    <input asp-for="nom_rh" class="form-control" />
+                    <span asp-validation-for="nom_rh" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="poste_rh" class="control-label"></label>
+                    <input asp-for="poste_rh" class="form-control" />
+                    <span asp-validation-for="poste_rh" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="date_embauche_rh" class="control-label"></label>
+                    <input asp-for="date_embauche_rh" class="form-control" />
+                    <span asp-validation-for="date_embauche_rh" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="salaire_net_rh" class="control-label"></label>
+                    <input asp-for="salaire_net_rh" class="form-control" />
+                    <span asp-validation-for="salaire_net_rh" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+        </div>
+              <form asp-action="AnyTrivialString">
+            <input type="submit" asp-route-id="@Model.id_rh" value="valider" asp-action="EditConfirmed" class="btn btn-primary" />
+            </form>
+        </form>
+    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,199 @@
+﻿@model IEnumerable<Rentabilite>
+
+
+<script>
+    $('.m-menu__item .m-menu__item--submenu').removeClass('m-menu__item--active');
+    $('.m-menu__item .m-menu__item--submenu').removeClass('m-menu__item--open');
+    $('.m-menu__submenu').hide();
+    $('.m-menu__item').removeClass('m-menu__item--active');
+    setTimeout(function () {
+        $('#admin').addClass('m-menu__item--active');
+        $('#admin').addClass('m-menu__item--open');
+        $('#admin .m-menu__submenu').show();
+        $('#renta').addClass('m-menu__item--active');
+    }, 500);
+</script>
+<script>
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+</script>
+<style>
+    #div_RentabByMonths {
+    }
+</style>
+<head>
+    <!-- ... autres inclusions ... -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi">
+    <div class="m-portlet__head">
+        <div class="m-portlet__head-caption">
+            <div class="m-portlet__head-title">
+                <span class="m-portlet__head-icon m--hide">
+                    <i class="flaticon-statistics"></i>
+                </span>
+                <h1 class="m-portlet__head-text" style="font-size:2rem;">
+                    Suivi Rentabilité
+                </h1>
+
+                <h2 class="m-portlet__head-label m-portlet__head-label--danger">
+                    <span>
+                        Rentabilité
+                    </span>
+                </h2>
+            </div>
+        </div>
+        <div class="m-portlet__head-tools">
+
+            <button id="importBTN" onclick="ImportFile()" title="Ajouter" class=" btn-sm btn btn-success"><i class="fa fa-plus"></i><span class="hidden-xs"> importer planning</span></button>
+
+            <button id="GraphicBTN" onclick="AffichGraphic()" title="Ajouter" class=" btn-sm btn btn-success"><i class="fa fa-plus"></i><span class="hidden-xs"> Graphic par mois</span></button>
+
+            <button id="GraphicCltBTN" onclick="AffichGraphicClients()" title="Ajouter" class=" btn-sm btn btn-success"><i class="fa fa-plus"></i><span class="hidden-xs"> Graphic par client</span></button>
+
+            <button id="GraphicCltLineBTN" onclick="AffichGrahicByClientsLine()" title="Ajouter" class=" btn-sm btn btn-success"><i class="fa fa-plus"></i><span class="hidden-xs"> Graphic par client Line</span></button>
+
+            <button id="btnExport" onclick="javascript:xport.toXLS('PlanningGrid');" title=" Export to XLS" class=" btn-sm btn btn-success"><i class="fa fa-plus"></i><span class="hidden-xs">  Export to XLS</span></button>
+
+
+        </div>
+    </div>
+    <div class="m-portlet__body">
+        <div class="row" id="div_graphic">
+            <div class="col-12">
+                @(Model)
+            </div>
+
+        </div>
+        <table id="PlanningGrid" class="table table-striped table-hover PlanningTable" cellspacing="0">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>Année</th>
+                    <th>Nbre Courses</th>
+                    <th>Nbre KM Estimés</th>
+                    <th>Nbre KM Réels</th>
+                    <th>PV HT KM</th>
+                    <th>CA HT</th>
+                    <th>CA TTC</th>
+                    <th>Coûts Fixes</th>
+                    <th>Coûts Chauffeurs</th>
+                    <th>Coûts Carburant HT</th>
+                    <th>Marge Brute HT</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @foreach (var Ra in Model)
+                {
+                    <tr id="@Ra.annee_courses" style="cursor: pointer;">
+
+
+
+                        <td>
+                            <a href="#" onclick="Affich_Rentab_By_Months('@Ra.annee_courses')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Info_non-talk.svg/1200px-Info_non-talk.svg.png" width="20px">
+                            </a> <small>Mois</small>
+                        </td>
+
+                        <td>
+                            <a href="#" onclick="Affich_Rentab_By_Clients('@Ra.annee_courses')">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Info_non-talk.svg/1200px-Info_non-talk.svg.png" width="20px">
+                            </a>
+                            <small>Client</small>
+                        </td>
+
+                        <td>@Ra.annee_courses</td>
+                        <td>@Ra.nb_courses.ToString("# ###.00")</td>
+                        <td>@Ra.nb_km_inclus.ToString("# ###.00")</td>
+                        <td>@Ra.nb_km_reels.ToString("# ###.00")</td>
+                        <td>@Ra.prix_vente_km.ToString("# ###.00")</td>
+                        <td>@Ra.prix_vente_ht.ToString("# ###.00")</td>
+                        <td>@Ra.prix_vente_ttc.ToString("# ###.00")</td>
+                        <td>@Ra.cout_fixe.ToString("# ###.00")</td>
+                        <td>@Ra.cout_chauffeur.ToString("# ###.00")</td>
+                        <td>@Ra.cout_carburant.ToString("# ###.00")</td>
+                        <td>@Ra.marge_brute.ToString("# ###.00")</td>
+                    </tr>
+                    <tr>
+                        <td colspan="13">
+                            <table id="@("div_RentabByMonths"+Ra.annee_courses)"></table>
+                            <div id="div_RentabByClients"></div>
+                            <div id="div_toolipCoutsFixe"></div>
+                            <div id="myPopoverCoutsFixes"></div>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+       
+    </div>
+</div>
+
+<!-- modal 0 -->
+<div class="modal fade" id="ImportFile" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <a class="pull-right btn btn-sm btn-danger btn-circle" data-dismiss="modal" aria-hidden="true"><i class="fa fa-close"></i></a>
+                <h4 class="modal-title">Nouveau planning </h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    @using (Html.BeginForm("Index", "Rentabilite", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <span>Select File:</span>
+                        <input type="file" name="postedFile" />
+                        <hr />
+                        <input type="submit" value="Upload" />
+                        <br />
+                        <span style="color:green">@ViewBag.Message</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal 1 -->
+<!-- modal Supp -->
+<script>
+    function Affich_Rentab_By_Months(v_annee) 
+    {
+        var x = document.getElementById("div_RentabByMonths" + v_annee);
+        if (x.style.display === "none") 
+        {
+
+            x.style.display = "block";
+        } else {
+
+            x.style.display = "none";
+        }
+        
+        $.ajax({
+            url: '@Url.Action("AffichRentabByMonths", "Rentabilite")',
+            method: 'GET',
+            data: { p_annee: v_annee },
+            success: function (data) {
+                $('#div_RentabByMonths' + v_annee).html(data);
+            }
+        })
+  };
+
+
+
+ $('.Affecter-button').click(function () {
+        alert("je suis ici")
+        $.ajax({
+            url: '@Url.Action("Affecter", "Planning")',
+            type: 'POST',
+            data: { id: 1 },
+            success: function (response) 
+
+            {}
+        });
+    });
+</script>

@@ -1,0 +1,83 @@
+ $(document).ready(function () {
+            // Appel AJAX pour récupérer les données du graphique des entrées et sorties
+            $.getJSON('@Url.Action("ChartData", "Banque")', function (data) {
+                // Assurer que nous avons les données pour chaque mois de l'année
+                const months = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+                    'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
+
+                // Préparer les données pour les séries du graphique
+                const entreesData = months.map((month, index) => {
+                    const entree = data.Entrees.find(item => item.Mois === index + 1);
+                    return entree ? entree.SumMtCredit : 0;
+                });
+
+                const sortiesData = months.map((month, index) => {
+                    const sortie = data.Sorties.find(item => item.Mois === index + 1);
+                    return sortie ? sortie.SumMtDebit : 0;
+                });
+                // Initialisation du graphique principal
+                // Assurez-vous d'inclure la bibliothèque Highcharts avant d'ajouter ce script
+                Highcharts.chart('container', {
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Entrées et Sorties par Mois'
+                    },
+                    xAxis: {
+                        categories: months,
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: 'Montant (en euros)'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                            '<td style="padding:0"><b>{point.y:.2f} €</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Entrées',
+                        data: entreesData
+                    }, {
+                        name: 'Sorties',
+                        data: sortiesData
+                    }]
+                });
+                
+            });
+
+            function loadDetails(month, type) {
+                // Récupérer et afficher les détails pour le mois et type sélectionné
+                $.getJSON('@Url.Action("ChartData", "Banque")', { month: month, type: type }, function (details) {
+                    Highcharts.chart('detailsContainer', {
+                        chart: {
+                            type: 'pie'
+                        },
+                        title: {
+                            text: 'Détails des ' + type + ' pour ' + month
+                        },
+                        series: [{
+                            name: type,
+                            colorByPoint: true,
+                            data: details.map(item => ({
+                                name: item.Name,
+                                y: item.Total
+                            }))
+                        }]
+                    });
+                });
+            }
+        });

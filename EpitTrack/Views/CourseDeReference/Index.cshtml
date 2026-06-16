@@ -1,0 +1,277 @@
+﻿@model EpitTrack.ViewModels.PreferencesViewModel
+@{
+    ViewData["Title"] = "Index";
+   
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les Préférences</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Coût Rh</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+            
+    <thead>
+        <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().nom_passagers_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().heur_deb_course_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().heur_fin_course_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().adr_depart_ref )
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().adr_arrivee_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().prix_vente_ht_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_1_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_2_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_3_ref)
+                    </th>
+                    <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.LesCoursesDeReferences) {
+                    <tr id="ligneCourse_@item.id_course_ref">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nom_passagers_ref)
+                        </td>
+                        <td>
+                            @((item.heur_deb_course_ref / 60).ToString("D2"))h@((item.heur_deb_course_ref % 60).ToString("D2"))
+                        </td>
+                        <td>
+                            @((item.heur_fin_course_ref / 60).ToString("D2"))h@((item.heur_fin_course_ref % 60).ToString("D2"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.adr_depart_ref)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.adr_arrivee_ref)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.prix_vente_ht_ref)
+                        </td>
+                        <td>
+                            @if (item.id_chauff_1_ref > 0)
+                            {
+                                <div id="divSelect1_@item.id_course_ref" style="display: none;">
+                                    <select id="SelectChauff1_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="1">Affecter</button>
+                                </div>
+                                 <div id="divAnnul1_@item.id_course_ref">
+                                    <label>@item.prenom_chauff_1_ref @item.nom_chauff_1_ref</label>
+                                    <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="1">Annuler</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="divSelect1_@item.id_course_ref">
+                                    <select id="SelectChauff1_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="1">Affecter</button>
+                                </div>
+                                <div id="divAnnul1_@item.id_course_ref" style="display:none;">
+                                        <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="1">Annuler</button>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.id_chauff_2_ref > 0)
+                            {
+                                <div id="divSelect2_@item.id_course_ref" style="display: none;">
+                                    <select id="SelectChauff2_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="2">Affecter</button>
+                                </div>
+                                <div id="divAnnul2_@item.id_course_ref">
+                                    <label>@item.prenom_chauff_2_ref @item.nom_chauff_2_ref</label>
+                                    <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="2">Annuler</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="divSelect2_@item.id_course_ref">
+                                    <select id="SelectChauff2_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="2">Affecter</button>
+                                </div>
+                                <div id="divAnnul2_@item.id_course_ref" style="display:none;">
+                                    <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="2">Annuler</button>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            @if (item.id_chauff_3_ref > 0)
+                            {
+                                <div id="divSelect3_@item.id_course_ref" style="display: none;">
+                                    <select id="SelectChauff3_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="3">Affecter</button>
+                                </div>
+                                <div id="divAnnul3_@item.id_course_ref">
+                                    <label>@item.prenom_chauff_3_ref @item.nom_chauff_3_ref</label>
+                                    <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="3">Annuler</button>
+                                </div>
+                            }
+                            else
+                            {
+                                <div id="divSelect3_@item.id_course_ref">
+                                    <select id="SelectChauff3_@item.id_course_ref">
+                                        <option value="">-Select chauffeur-</option>
+                                        @foreach (var itemChauff in Model.lesChauffeurs)
+                                        {
+                                            <option value="@itemChauff.id_chauff">@itemChauff.prenom_chauff @itemChauff.nom_chauff</option>
+                                        }
+                                    </select>
+                                    <button class="btn-affecter" data-id="@item.id_course_ref" data-order="3">Affecter</button>
+                                </div>
+                                <div id="divAnnul3_@item.id_course_ref" style="display:none;">
+                                    <button class="btn-annuler-affectation" data-id="@item.id_course_ref" data-order="3">Annuler</button>
+                                </div>
+                            }
+                        </td>
+                        <td>
+                            <button class="Refresh-button" data-id_chauff="@item.id_course_ref" data-id_course="">Affecter</button>
+                           
+                            <a asp-action="Edit" asp-route-id="@item.id_course_ref">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.id_course_ref">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.id_course_ref">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script>
+
+    $(document).ready(function ()
+    {
+        
+        /****************** */
+        $('.btn-affecter').click(function () {
+            
+            var IdCourse = $(this).data('id');
+            var IdChauff = $("#SelectChauff1_" + IdCourse).val();
+            var orderChauff = $(this).data('order');
+            var ChauffSelectionne = $("#SelectChauff1_" + IdCourse + " option:selected").text();
+            
+            if (ChauffSelectionne.length > 0) 
+            { 
+                var parts = ChauffSelectionne.split(" "); 
+                var prenom_chauff = parts[0];
+                var nom_chauff = parts.slice(1).join(" "); // Rejoint les parties restantes avec un espace
+                prenom_chauff = prenom_chauff.length === 0 ? " " : prenom_chauff;
+                nom_chauff = nom_chauff.length === 0 ? " " : nom_chauff;
+                Affecter_chauff(1, IdCourse, IdChauff, prenom_chauff, nom_chauff);
+              
+            };
+        });
+         
+
+        $('.btn-annuler-affectation').click(function () {
+            
+            var idCourse = $(this).data('id');
+            var orderChauff = $(this).data('order');
+            Annuler_affect(1, idCourse);
+            $('#divSelect' + orderChauff + '_' + idCourse).show();
+            $('#divAnnul'  + orderChauff + '_' + idCourse).hide();
+            
+            
+        });
+
+
+        function Affecter_chauff(p_order_chauff, p_id_course, p_id_chauff, p_prenom_chauff, p_nom_chauff, td_a_modifier) 
+        {
+            $.ajax({
+                url: '/CourseDeReference/Affect_Preferences', // Vérifiez que cette URL est correcte.
+                type: 'POST',
+                data: { order_chauff: p_order_chauff, id_course: p_id_course, id_chauff: p_id_chauff},
+                success: function (response) 
+                {
+                    $('#divAnnul' + p_order_chauff + '_' + p_id_course + ' label').remove();
+                    $('#divAnnul'  + p_order_chauff  + '_' + p_id_course).append($('<label>').text(p_prenom_chauff + ' ' + p_nom_chauff));
+                    $('#divSelect' + p_order_chauff + '_' + p_id_course).hide();
+                    $('#divAnnul'  + p_order_chauff  + '_' + p_id_course).show();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Erreur lors de l'affectation : ", error);
+                    // Ici, vous pouvez ajouter une logique pour afficher l'erreur à l'utilisateur.
+                }
+            });
+        };
+
+
+        function Annuler_affect(p_order_chauff, p_id_course) 
+        {
+            
+            $.ajax({
+                url: '/CourseDeReference/Annuler_affect', // Vérifiez que cette URL est correcte.
+                type: 'POST',
+                data: { order_chauff: p_order_chauff, id_course: p_id_course},
+                success: function (response) 
+                {
+                    
+                },
+                error: function (xhr, status, error) {
+                    console.error("Erreur lors de l'affectation : ", error);
+                    // Ici, vous pouvez ajouter une logique pour afficher l'erreur à l'utilisateur.
+                }
+            });
+        };
+
+    });
+
+    @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+            }
+            
+</script>
+    

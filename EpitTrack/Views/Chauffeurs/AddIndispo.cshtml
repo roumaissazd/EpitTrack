@@ -1,0 +1,27 @@
+﻿@model EpitTrack.Models.Chauffeur
+
+@{
+    ViewData["Title"] = "Ajouter Indisponibilités";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+
+           
+
+
+                 <div class="col-6">
+                    <label class="control-label">@ViewBag.chaffeur</label>
+                </div>
+                <div class="col-6">
+                    <select name="motif_indispo_chauff" asp-items="@ViewBag.Motifs">
+                        <option>-- select motif --</option>
+                    </select>
+                </div>
+                <div>
+               <a asp-action="EnregistrerIndispo" asp-route-id="@Model.id_chauff">Enregistrer</a>
+            </div>
+    </form>
+    </div>
+</div>

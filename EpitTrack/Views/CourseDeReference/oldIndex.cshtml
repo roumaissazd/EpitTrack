@@ -1,0 +1,218 @@
+﻿@model EpitTrack.ViewModels.PreferencesViewModel
+@{
+    ViewData["Title"] = "Index";
+   
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Les Préférences</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create"> + Ajouter Coût Rh</a>
+        </p>
+
+        <table id="example1" class="table table-bordered table-striped">
+           
+    <thead>
+        <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().nom_passagers_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().heur_deb_course_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().heur_fin_course_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().adr_depart_ref )
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().adr_arrivee_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().prix_vente_ht_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_1_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_2_ref)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.LesCoursesDeReferences.FirstOrDefault().id_chauff_3_ref)
+                    </th>
+                    <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.LesCoursesDeReferences) {
+                    <tr id="ligneCourse_@item.id_course_ref">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.nom_passagers_ref)
+                        </td>
+                        <td>
+                            @((item.heur_deb_course_ref / 60).ToString("D2"))h@((item.heur_deb_course_ref % 60).ToString("D2"))
+                        </td>
+                        <td>
+                            @((item.heur_fin_course_ref / 60).ToString("D2"))h@((item.heur_fin_course_ref % 60).ToString("D2"))
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.adr_depart_ref)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.adr_arrivee_ref)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.prix_vente_ht_ref)
+                        </td>
+                        <td>
+                            <button class="Affecter-button" data-id="@item.id_course">Affecter</button>
+                        </td>
+                        <td>
+                            @item.nom_chauff_2_ref @item.prenom_chauff_2_ref
+                        </td>
+                        <td>
+                            @item.nom_chauff_3_ref @item.prenom_chauff_3_ref
+                        </td>
+                        <td>
+                            <button class="Refresh-button" data-id_chauff="@item.id_course_ref" data-id_course="">Affecter</button>
+                           
+                            <a asp-action="Edit" asp-route-id="@item.id_course_ref">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.id_course_ref">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.id_course_ref">Delete</a>
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+    <script>
+        //setInterval(Rafraichir, 30000);
+
+       // setTimeout(function () {
+        //    window.location.reload(1);
+       // }, 30000); // 30000 milliseconds = 30 seconds
+  
+       
+function Rafraichir() {
+    $.ajax({
+                url: '@Url.Action("Actualiser", "Planning")',
+        method: 'GET',
+        success: function(data) {
+                    window.location.reload();
+        }
+    });
+   };
+
+
+
+
+$(document).ready(function () 
+        {
+            
+            $('.Refresh-button').click(function () {
+                
+                var itemId = $(this).data('id');
+                var tr = $(this).closest('tr');
+                var td_a_modifier = tr.find('td').eq(7)
+                $.ajax({
+                  url: '@Url.Action("Reshresh", "Planning")',
+                  type: 'POST',
+                  data: { id: itemId },
+                  success: function (response) 
+                  {
+                  if(response.success)
+                    {
+                            td_a_modifier.text(response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']')
+                    }
+                  },
+                  error: function (error) 
+                  {
+                  // Gérer les erreurs ici
+                  }
+                });
+                });
+            $('.Affecter-button').click(function ()
+            {
+                var itemId = $(this).data('id');
+                var tr = $(this).closest('tr');
+                var td_a_modifier = tr.find('td').eq(7)
+                    SelectChauff.addEventListener('change', function () {
+                    let selectedID = this.value;
+                    Affecter_chauff(selectedID, itemId)
+            });
+            });
+            
+            function Affecter_chauff(id_chauff,id_course) {
+                alert('id_chauff '+id_chauff + '  id_course' + id_course )
+                var idLigne = 'ligneCourse_' + id_course;
+                var tr = $('#' + idLigne);
+                var td_a_modifier = tr.find('td').eq(7)
+                $.ajax({
+                    url: '@Url.Action("Affect_chauff", "Planning")',
+                    type: 'POST',
+                    data: { idch: id_chauff, idc:id_course },
+                    success: function (response) {
+                    if(response.success) 
+                    {
+                            balise_supp_affect = '<a href = "javascript:SuppAffect();" style = "font-size: 25px; font-weight: bold;">x</a>'
+                            balise_affect_chauff = '<p>' + response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']'
+
+                            td_a_modifier.text(response.updatedItem.prenom_chauff + ' ' + response.updatedItem.nom_chauff + '[' + response.updatedItem.ca_ht_chauff + ']')
+                            td_a_modifier.html(balise_affect_chauff + '<span>' + balise_supp_affect + '</span>')
+                    }
+                     else
+                    {
+                            erreur_msg = '<p style="color: red;">' + response.message + '</p>'
+                            td_a_modifier.html(erreur_msg)
+                    }
+                    }
+                    });
+                    };
+
+                    /**********/
+            function SuppAffect() 
+            {
+                alert('je suis ici')
+                /*
+                var idLigne = 'ligneCourse_' + id_course;
+                var tr = $('#' + idLigne);
+                var td_a_modifier = tr.find('td').eq(7)
+                $.ajax({
+                    url: '/Url.Action("Supp_Affect", "Planning")',
+                    type: 'POST',
+                    data: { idch: id_chauff, idc: id_course },
+                    success: function (response) {
+                        if (response.success) {
+                            let liste = '<select id="SelectChauff"><option>--select chauffeur --</option>'
+                            response.leschauffeurs.forEach(chauff => {
+                                liste += '<option value=' + chauff.id_chauff + '>' + chauff.prenom_chauff + ' ' + chauff.nom_chauff + '</option>';
+                            });
+                            liste = liste + '</select>'
+                            td_a_modifier.html(liste)
+                            SelectChauff.addEventListener('change', function () {
+                                let selectedID = this.value;
+                                Affecter_chauff(selectedID, itemId)
+                                                                                 });
+                        }
+                    }
+                });
+                */
+            };
+                    /********/
+        });
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+            }
+            
+</script>
+    
+</div>

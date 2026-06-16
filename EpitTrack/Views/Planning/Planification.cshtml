@@ -1,0 +1,169 @@
+﻿@model EpitTrack.ViewModels.PlanificationViewModel
+@{
+    ViewData["Title"] = "Index"; 
+}
+<style>
+/* Popup container */
+.popup {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+/* The actual popup (appears on top) */
+.popup .popuptext {
+  visibility: hidden;
+  width: 50px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -80px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class when clicking on the popup container (hide and show the popup) */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s
+}
+    
+   .btn-centered {
+        display: block; /* Affiche le bouton comme un bloc */
+        width: 150px; /* Largeur fixe du bouton */
+        height: 50px; /* Hauteur fixe du bouton */
+        line-height: 50px; /* Hauteur de ligne égale à la hauteur du bouton pour centrer verticalement le texte */
+        margin: 0 auto; /* Marges automatiques sur les côtés pour centrer horizontalement */
+        text-align: center; /* Centrer le texte à l'intérieur du bouton horizontalement */
+        padding: 0; /* Pas de padding pour que line-height contrôle l'alignement vertical */
+    }
+</style>
+<head>
+    <!-- ... autres inclusions ... -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+</head>
+
+<div class="card">
+    <div class="card-header">
+        @if (Model.leplanif is not null && Model.leplanif.pourcent_compt < 100)
+        {
+            <div id="progressBar" style="width:@Model.leplanif.pourcent_compt%; height:20px; background-color:steelblue;display:flex; justify-content:center; align-items:center; color:white;">
+                <span>@Model.leplanif.pourcent_compt%</span>
+        </div>
+        }
+    </div>
+    <div>
+        @if (Model.leplanif is not null && Model.leplanif.id_planif > 0)
+             {
+                <h4 style="text-align:center">
+                 N° planif : @Model.leplanif.id_planif -- Date Courses :@Model.leplanif.date_courses.ToShortDateString() -- Nb Courses : @Model.leplanif.nb_courses 
+                 </h4>
+            <h6 style="text-align:center">@Model.leplanif.nb_courses_planifiees Courses planifiées /@Model.leplanif.nb_courses courses </h6>
+            <h6 style="text-align:center"><em>Temps Attente : @Model.leplanif.tps_attente</em></h6>
+             }
+
+    </div>
+       <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().date_course)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().nom_passagers)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().heur_deb_course)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().heur_fin_course)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().adr_depart)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().adr_arrivee)
+            </th>
+            <th>
+                        @Html.DisplayNameFor(model => model.lesplanifications.FirstOrDefault().prix_vente_ht)
+            </th>
+            <th>
+               Chauffeur
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.lesplanifications) {
+           <tr id="ligneCourse_@item.id_course">
+            <td>
+                            @(item.date_course.ToString("dd/MM/yyyy"))
+            </td>
+            <td>
+                            @Html.DisplayFor(modelItem => item.nom_passagers)
+            </td>
+            <td>
+                            @(item.heur_deb_course / 60)
+                    <span>h</span>
+                            <span>@(item.heur_deb_course % 60)</span>
+            </td>
+            <td>
+                            @(item.heur_fin_course / 60)
+                    <span>h</span>
+                            <span>@(item.heur_fin_course % 60)</span>
+            </td>
+            <td>
+                            @Html.DisplayFor(modelItem => item.adr_depart)
+            </td>
+            <td>
+                            @Html.DisplayFor(modelItem => item.adr_arrivee)
+            </td>
+            <td>
+                            @Html.DisplayFor(modelItem => item.prix_vente_ht)
+            </td>
+                        <td id="@item.id_course">
+                            @Html.DisplayFor(modelItem => item.prenom_chauff)
+                            <span>@Html.DisplayFor(modelItem => item.nom_chauff)</span>
+                            <span>[@Html.DisplayFor(modelItem => item.ca_ht_chauff)]</span>
+                  </td>
+            <td>
+                            <button class="Refresh-button" data-id="@item.id_course">Actualiser</button>
+                            <button class="Affecter-button" data-id="@item.id_course">Affecter</button>
+                            <a asp-action="Edit" asp-route-id="@item.id_course">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.id_course">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.id_course">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+    </div>
+<script>
+          
+
+        @section Scripts {
+            @{
+                await Html.RenderPartialAsync("_ValidationScriptsPartial");
+            }
+            }         
+</script>
+    

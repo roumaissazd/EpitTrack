@@ -1,0 +1,133 @@
+﻿@model IEnumerable<EpitTrack.Models.dashboard>
+@{
+    ViewData["Title"] = "Index";
+}
+
+ <!-- Small boxes (Stat box) -->
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>
+                    @Html.DisplayFor(model => model.Where(cout => cout.mois_cout=="TOTAL").FirstOrDefault().cout_rh)<sup style="font-size: 20px"> Euros</sup>
+                </h3>
+                </h3>
+                <p>
+                    Coût @Html.DisplayNameFor(model => model.FirstOrDefault().cout_rh) en    @Html.DisplayFor(model => model.FirstOrDefault().mois_cout)
+                </p>
+               
+            </div>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3> @Html.DisplayFor(model => model.Where(cout => cout.mois_cout=="TOTAL").FirstOrDefault().cout_leasing)<sup style="font-size: 20px"> Euros</sup></h3>
+
+                <p>Coût @Html.DisplayNameFor(model => model.FirstOrDefault().cout_leasing) en    @Html.DisplayFor(model => model.FirstOrDefault().mois_cout)</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3> @Html.DisplayFor(model => model.Where(cout => cout.mois_cout=="TOTAL").FirstOrDefault().cout_carburant)<sup style="font-size: 20px"> Euros</sup></h3>
+
+                <p>Coût @Html.DisplayNameFor(model => model.FirstOrDefault().cout_carburant) en    @Html.DisplayFor(model => model.FirstOrDefault().mois_cout)</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-6">
+        <!-- small box -->
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3> @Html.DisplayFor(model => model.Where(cout => cout.mois_cout=="TOTAL").FirstOrDefault().mt_frais)<sup style="font-size: 20px"> Euros</sup></h3>
+
+                <p>Coût @Html.DisplayNameFor(model => model.FirstOrDefault().mt_frais) en    @Html.DisplayFor(model => model.FirstOrDefault().mois_cout)</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <!-- ./col -->
+</div>
+<!-- /.row -->
+<!-- Main row -->
+<div class="row">
+    <table class="table table-bordered table-striped">
+
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().mois_cout)
+                </th>
+                <th>
+                    Coût Global
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().cout_rh)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().cout_leasing)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().cout_carburant)
+                </th>
+              
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().mt_frais)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+             {
+               decimal totalCouts = item.cout_carburant + item.cout_leasing + item.cout_rh + item.mt_frais;
+             
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.mois_cout)
+                    </td>
+
+                    <td>
+                        @totalCouts.ToString("# ###.00")
+                    </td>
+                    <td>
+                        @item.cout_rh.ToString("# ###.00")
+                    </td>
+                    <td>
+                        @item.cout_leasing.ToString("# ###.00")
+                    </td>
+                    <td>
+                        @item.cout_carburant.ToString("# ###.00")
+                    </td>
+                    
+                    <td>
+                        @item.mt_frais.ToString("# ###.00")
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<!-- /.row (main row) -->

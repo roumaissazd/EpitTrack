@@ -1,0 +1,69 @@
+﻿@model EpitTrack.Models.frais
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+<hr />
+<div class="card card-primary">
+    <div class="card-header">
+        <h3 class="card-title">Frais </h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="id_frais"/>
+        <input type="hidden" asp-for="id_typefrais"/>
+        <div class="card-body">
+            <div class="row">
+               
+                <div class="col-sm-3">
+                    <label asp-for="type_frais" class="control-label"></label>
+                    <input asp-for="type_frais" class="form-control" readonly />
+                    <span asp-validation-for="type_frais" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="date_deb_frais" class="control-label"></label>
+                    <input asp-for="date_deb_frais" class="form-control" readonly />
+                    <span asp-validation-for="date_deb_frais" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="date_fin_frais" class="control-label"></label>
+                    <input asp-for="date_fin_frais" class="form-control"/>
+                    <span asp-validation-for="date_fin_frais" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="mt_frais_ht" class="control-label"></label>
+                    <input asp-for="mt_frais_ht" class="form-control" />
+                    <span asp-validation-for="mt_frais_ht" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label asp-for="mt_frais_ttc" class="control-label"></label>
+                    <input asp-for="mt_frais_ttc" class="form-control" />
+                    <span asp-validation-for="mt_frais_ttc" class="text-danger"></span>
+                </div>
+                <div class="col-sm-3">
+                    <label asp-for="comment_frais" class="control-label"></label>
+                    <input asp-for="comment_frais" class="form-control" />
+                    <span asp-validation-for="comment_frais" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+              <form asp-action="AnyTrivialString">
+            <input type="submit" asp-route-id="@Model.id_frais" value="valider" asp-action="EditConfirmed" class="btn btn-primary" />
+            </form>
+        </form>
+    </div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

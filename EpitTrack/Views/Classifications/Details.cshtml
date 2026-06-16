@@ -1,0 +1,36 @@
+﻿@model EpitTrack.Models.Classification
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Classification</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.lib_to_class)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.lib_to_class)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_class_op)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_class_op)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.id_sous_class_op)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.id_sous_class_op)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.id_classification">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

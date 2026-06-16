@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="epitrack" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\perso\\Source\\EpitTrack\\EpitTrack\\obj\\Release\\net6\.0\\win-x64\\PubTmp\\Out\\$" />
+  </parameter>
+</parameters>
